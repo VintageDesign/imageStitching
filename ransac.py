@@ -1,3 +1,6 @@
+import numpy as np
+
+
 def generateMatrix(points1,  points2):
     '''
     Generates a 2n x 9 matrix that the homography matrix can be derived from
