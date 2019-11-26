@@ -7,6 +7,7 @@ def generateMatrix(points1,  points2):
     '''
 
     matrix = np.zeros((2 * len(points1), 9))
+    print(matrix.shape)
 
     for i in range(0, 2 * len(points1), 2):
         # Map the index from the size of the matrix, 8, to the number of points, 4.
@@ -31,9 +32,8 @@ def ransac(match1, match2):
     Implemenation of a RANSAC algorthm to find the a good approximation for the Homograpy
     '''
     fitness = 0
-    iteration = 0
 
-    while fitness < .8 :
+    while fitness < .8:
         points = np.random.permutation(range(0,len(match1)))[:4]
 
         leftPoints = [match1[points[0]], match1[points[1]], match1[points[2]], match1[points[3]]]
@@ -44,32 +44,27 @@ def ransac(match1, match2):
         U, theta, V = np.linalg.svd(matrix)
 
         H = V[:, 8]
-        H = H / H[8]
-
-        print(H)
+        print(H.shape)
 
         H = H.reshape((3,3))
 
-        print(H)
+        H = np.multiply(V, V[8])
         fitPop = 0
 
         for i in range(0, len(leftPoints)):
             # Coords must be 1x3 to multiply with the 3x3 Homography matrix
-            coord = np.asarray([leftPoints[i][0], leftPoints[i][0], 1])
+            coord = [leftPoints[i][0], leftPoints[i][0], 1]
             expected = [rightPoints[i][0], rightPoints[i][0], 1]
-            newcoord = np.matmul(H, coord.T)
-            newcoord = newcoord / newcoord[2]
-            print(newcoord, expected)
+            newcord = np.matmul(H, np.transpose(coord))
+            newcord = newcord * newcord[2]
 
-            outcome = (newcoord[0] - expected[0],  newcoord[1] - expected[1])
+            outcome = (newcord[0] - oldcord[0],  newcord[1] - oldcord[1])
 
             if -1 < outcome[0] < 1 and -1 < outcome[1] < 1:
                 fitPop += 1
-            input()
 
         fitness = fitPop / len(leftPoints)
-        iteration += 1
-    print(H, iteration)
+    print(H)
     return H
 
 
