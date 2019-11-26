@@ -1,8 +1,7 @@
 import cv2
 import numpy                      as np
 from matplotlib import pyplot     as plt
-from checkColor import checkColor
-from match      import match
+from ransac import ransac
 
 # Taken from OpenCV documentation
 img1 = cv2.imread(cv2.samples.findFile("S1.jpg"), cv2.IMREAD_GRAYSCALE)
