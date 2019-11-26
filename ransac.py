@@ -37,10 +37,10 @@ def calcH(points1, points2):
         matrix.append(r1)
         matrix.append(r2)
     
-        u, s, v = np.linalg.svd(matrix)
+    u, s, v = np.linalg.svd(matrix)
 
-        h = np.reshape(v[8], (3,3))
-        h = (1/h.item(8)) * h
+    h = np.reshape(v[8], (3,3))
+    h = (1/h.item(8)) * h
     #print(matrix)
     #print(h)
     return h
