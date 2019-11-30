@@ -2,10 +2,21 @@ import cv2
 import numpy                      as np
 from matplotlib import pyplot     as plt
 from ransac import ransac
+from image import *
 
 # Taken from OpenCV documentation
-img1 = cv2.imread(cv2.samples.findFile("S1.jpg"), cv2.IMREAD_GRAYSCALE)
-img2 = cv2.imread(cv2.samples.findFile("S2.jpg"), cv2.IMREAD_GRAYSCALE)
+img1_orig = cv2.imread("S1.jpg")
+img2_orig = cv2.imread("S2.jpg")
+
+img1_orig = cv2.cvtColor(img1_orig, cv2.COLOR_BGR2RGB)
+img2_orig = cv2.cvtColor(img2_orig, cv2.COLOR_BGR2RGB)
+
+img1_orig = cv2.resize(img1_orig, None, fx = .5, fy = .5) # Tried of waiting for fullsize images
+img2_orig = cv2.resize(img2_orig, None, fx = .5, fy = .5)
+
+img1 = cv2.cvtColor(img1_orig, cv2.COLOR_BGR2GRAY)
+img2 = cv2.cvtColor(img2_orig, cv2.COLOR_BGR2GRAY)
+
 if img1 is None or img2 is None:
     print('Could not open or find the images!')
     exit(0)
@@ -34,4 +45,11 @@ print("Number of matches: ", len(filtered))
 # End of openCV code
 
 #Our code:
-homography = ransac(matched1, matched2)
+homography = ransac(matched2, matched1)
+
+combined = combine_images(img1_orig, img2_orig, homography)
+
+combined = trim(combined)
+
+plt.imshow(combined)
+plt.show()
