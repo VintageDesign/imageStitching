@@ -1,6 +1,7 @@
 """ This module performs the RANSAC algorithm using our homography matrix
     function in order to coorelate points between two lists """
-
+import sys
+sys.path.append("./depend/")
 import numpy as np
 
 def calc_h(points1, points2):

@@ -1,6 +1,8 @@
 """
 This module is used to manage the image editing
 """
+import sys
+sys.path.append("./depend/")
 import numpy as np
 import cv2
 from matplotlib import pyplot as plt
