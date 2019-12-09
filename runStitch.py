@@ -3,35 +3,39 @@ sys.path.append("./depend/")
 import cv2
 import numpy                      as np
 from matplotlib import pyplot     as plt
-from ransac import ransac
-from image import *
+import ransac
+import image
 from timeit import default_timer as timer
 
-imfile1 = "S1.jpg"
-imgile2 = "S2.jpg"
-
-if (len(sys.argv)) == 3:
-  imfile1 = sys.argv[1]
-  imgile2 = sys.argv[2]
-elif (len(sys.argv) != 1):
-  print("Invalid arguments: Defaulting to S1.jpg and S2.jpg")
-
 #Constants for options
-DRAW_MATCHES = True #Draw mached points image
+DRAW_MATCHES = False #Draw mached points image
 DRAW_COMBINED = False #Draw the final combined image
 DISPLAY_INDIVIDUAL_TIMING = False #Draw timings for each part
 CUTOFF = .95 # Cutoff for ransac/point matching
-SCALE_IMAGE = False #Scale the image down in size
+SCALE_IMAGE = True #Scale the image down in size
 SCALE_IMAGE_SIZE = .5 #percent to scale the image by
 MAX_RANSAC = 100000 #Max number of ransac iterations
 
 if (SCALE_IMAGE is False):
   SCALE_IMAGE_SIZE = 1
 
+if (len(sys.argv) == 3):
+  file1 = sys.argv[1]
+  file2 = sys.argv[2]
+elif (len(sys.argv) != 0):
+  print("Invalid number of system arguments defaulting to S1.jpg and S2.jpg")
+  file1 = "S1.jpg"
+  file2 = "S2.jpg"
+else:
+  file1 = "S1.jpg"
+  file2 = "S2.jpg"
+
 # Taken from OpenCV documentation
 totalstart = timer()
-img1_orig = cv2.imread("S1.jpg")
-img2_orig = cv2.imread("S2.jpg")
+print(file1)
+img1_orig = cv2.imread(file1)
+img2_orig = cv2.imread(file2)
+print(img1_orig)
 
 img1_orig = cv2.cvtColor(img1_orig, cv2.COLOR_BGR2RGB)
 img2_orig = cv2.cvtColor(img2_orig, cv2.COLOR_BGR2RGB)
@@ -91,14 +95,14 @@ print("\tNumber of matches: ", len(filtered))
 
 #Our code:
 start = timer()
-homography = ransac(matched2, matched1, CUTOFF, MAX_RANSAC)
+homography = ransac.ransac(matched2, matched1, CUTOFF, MAX_RANSAC)
 end = timer()
 if (DISPLAY_INDIVIDUAL_TIMING):
   print("RANSAC runtime: " + str(end-start))
 
 start = timer()
-combined = combine_images(img1_orig, img2_orig, homography)
-combined = trim(combined)
+combined = image.combine_images(img1_orig, img2_orig, homography)
+combined = image.trim(combined)
 end = timer()
 if (DISPLAY_INDIVIDUAL_TIMING):
   print("Create new image runtime: " + str(end-start))
