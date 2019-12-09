@@ -22,7 +22,7 @@ if (SCALE_IMAGE is False):
 if (len(sys.argv) == 3):
   file1 = sys.argv[1]
   file2 = sys.argv[2]
-elif (len(sys.argv) != 0):
+elif (len(sys.argv) != 1):
   print("Invalid number of system arguments defaulting to S1.jpg and S2.jpg")
   file1 = "S1.jpg"
   file2 = "S2.jpg"
@@ -32,10 +32,8 @@ else:
 
 # Taken from OpenCV documentation
 totalstart = timer()
-print(file1)
 img1_orig = cv2.imread(file1)
 img2_orig = cv2.imread(file2)
-print(img1_orig)
 
 img1_orig = cv2.cvtColor(img1_orig, cv2.COLOR_BGR2RGB)
 img2_orig = cv2.cvtColor(img2_orig, cv2.COLOR_BGR2RGB)
@@ -113,3 +111,6 @@ print("Total runtime: " + str(totalend-totalstart))
 if (DRAW_COMBINED):
   plt.imshow(combined)
   plt.show()
+
+cv2.imwrite('combined.jpg', cv2.cvtColor(combined, cv2.COLOR_RGB2BGR))
+

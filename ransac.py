@@ -58,12 +58,6 @@ def ransac(match1, match2, CUTOFF = .8, MAX_RANSAC = 100000):
             # input()
         fitness = fit_pop / len(match1)
         iteration += 1
-    print("Homography:")
-    print(h_mat)
-    print("Match 1:")
-    print(left_points)
-    print("Match 2:")
-    print(right_points)
     
     print("\tFitness percent: ", fitness, "  Matches: ", fit_pop, "  Iterations: ", iteration)
     return h_mat
