@@ -28,14 +28,13 @@ def calc_h(points1, points2):
     #print(h)
     return h_mat
 
-def ransac(match1, match2):
+def ransac(match1, match2, CUTOFF = .8, MAX_RANSAC = 100000):
     '''
     Implemenation of a RANSAC algorthm to find the a good approximation for the Homograpy
     '''
     fitness = 0
     iteration = 0
-
-    while fitness < .8:
+    while fitness < CUTOFF and iteration < MAX_RANSAC:
         points = np.random.permutation(range(0, len(match1)))[:4]
 
         left_points = [match1[points[0]], match1[points[1]], match1[points[2]], match1[points[3]]]
@@ -59,6 +58,6 @@ def ransac(match1, match2):
             # input()
         fitness = fit_pop / len(match1)
         iteration += 1
-    #print(h_mat, iteration)
-    print("Fitness percent: ", fitness, "  Matches: ", fit_pop, "  Iterations: ", iteration)
+    
+    print("\tFitness percent: ", fitness, "  Matches: ", fit_pop, "  Iterations: ", iteration)
     return h_mat
