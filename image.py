@@ -26,16 +26,18 @@ def trim(image):
 def combine_images(img1, img2, h_matrix):
     # Calculate new size
     try:
-        (rows, columns, channels) = img1.shape
+        (rows, columns, channels) = img1.shape # Get dimensions from img1
     except:
         (rows, columns) = img1.shape
         channels = 1
     #print(str(columns) + "x" + str(rows) + "x" + str(channels))
 
+    # Get our border boundries that we need to expand the new image to
     pts = np.float32([[0, 0], [0, rows-1], [columns-1, rows-1], [columns-1, 0]]).reshape(-1, 1, 2)
-    dst = cv2.perspectiveTransform(pts, h_matrix)
+    dst = cv2.perspectiveTransform(pts, h_matrix) # Create new image using these boundries
 
+    # copy image 2 into the empty array
     dst = cv2.warpPerspective(img2, h_matrix, (img1.shape[1] + img2.shape[1], img1.shape[0]))
-    dst[0:img1.shape[0], 0:img1.shape[1]] = img1
+    dst[0:img1.shape[0], 0:img1.shape[1]] = img1 #Copy the transformed image into the destination image
 
     return dst
